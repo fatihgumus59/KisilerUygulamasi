@@ -22,16 +22,21 @@ class Anasayfa: UIViewController{
         kisilerTableView.delegate = self
         kisilerTableView.dataSource = self
         
-        var k1 = Kisiler(kisi_id: 1, kisi_ad: "Fatih Gumus", kisi_tel: "14785236951")
-        var k2 = Kisiler(kisi_id: 2, kisi_ad: "Mehmet Demir", kisi_tel: "32145698741")
-        var k3 = Kisiler(kisi_id: 3, kisi_ad: "Ayşe Duzgunel", kisi_tel: "78965432175")
-        var k4 = Kisiler(kisi_id: 4, kisi_ad: "Leyla Doğan", kisi_tel: "963258741159")
+        let k1 = Kisiler(kisi_id: 1, kisi_ad: "Fatih Gumus", kisi_tel: "14785236951")
+        let k2 = Kisiler(kisi_id: 2, kisi_ad: "Mehmet Demir", kisi_tel: "32145698741")
+        let k3 = Kisiler(kisi_id: 3, kisi_ad: "Ayşe Duzgunel", kisi_tel: "78965432175")
+        let k4 = Kisiler(kisi_id: 4, kisi_ad: "Leyla Doğan", kisi_tel: "963258741159")
         
         kisilerListesi.append(k1)
         kisilerListesi.append(k2)
         kisilerListesi.append(k3)
         kisilerListesi.append(k4)
         
+    }
+    
+    //başlangıç sayfası ne zaman görünse çalışır
+    override func viewWillAppear(_ animated: Bool) {
+        print("Ansayfaya Dönüldü")
     }
    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -71,4 +76,31 @@ extension Anasayfa : UITableViewDelegate, UITableViewDataSource{
         
         return hucre
     }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let kisi = kisilerListesi[indexPath.row]
+        performSegue(withIdentifier: "toDetay", sender: kisi)
+        tableView.deselectRow(at: indexPath, animated: true)
+    }
+        
+    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        let silAction = UIContextualAction(style: .destructive, title: "Sil"){contecttualAction,view,bool in
+            let kisi = self.kisilerListesi[indexPath.row]
+            
+            let alert = UIAlertController(title: "Silme İşlemi", message: "\(kisi.kisi_ad!) kişisi silinsin mi ?", preferredStyle: .alert)
+            
+            let iptalAction = UIAlertAction(title: "İptal", style: .cancel)
+            alert.addAction(iptalAction)
+            
+            let evetAction = UIAlertAction(title: "Evet", style: .destructive){action in
+                print("Kişi sil \(kisi.kisi_id!)")
+            }
+            alert.addAction(evetAction)
+            
+            self.present(alert,animated: true)
+            
+        }
+        return UISwipeActionsConfiguration(actions: [silAction])
+    }
+    
 }
