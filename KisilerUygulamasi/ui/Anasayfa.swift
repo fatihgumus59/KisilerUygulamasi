@@ -77,12 +77,14 @@ extension Anasayfa : UITableViewDelegate, UITableViewDataSource{
         return hucre
     }
     
+    //seçili satıra tıklanırsa onun detay sayfasına gidecek
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let kisi = kisilerListesi[indexPath.row]
         performSegue(withIdentifier: "toDetay", sender: kisi)
         tableView.deselectRow(at: indexPath, animated: true)
     }
         
+    //seçili nesneyi sürükleyerek işlem yapmak için
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         let silAction = UIContextualAction(style: .destructive, title: "Sil"){contecttualAction,view,bool in
             let kisi = self.kisilerListesi[indexPath.row]
